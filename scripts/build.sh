@@ -12,7 +12,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(dirname "$SCRIPT_DIR")"
-ZEST_REPO="$(cd "$PLUGIN_DIR/../zest" && pwd)"
+ZEST_REPO="${ZEST_REPO:-$(cd "$PLUGIN_DIR/../zest" && pwd)}"
 DIST_DIR="$PLUGIN_DIR/dist"
 
 echo "Zest Cookie Consent — build"

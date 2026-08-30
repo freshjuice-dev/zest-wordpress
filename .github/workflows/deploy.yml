@@ -35,6 +35,8 @@ jobs:
           npm run build
 
       - name: Build plugin
+        env:
+          ZEST_REPO: ${{ github.workspace }}/zest-core
         run: ./scripts/build.sh
 
       - name: Determine version
