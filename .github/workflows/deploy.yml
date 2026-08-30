@@ -39,19 +39,8 @@ jobs:
           ZEST_REPO: ${{ github.workspace }}/zest-core
         run: ./scripts/build.sh
 
-      - name: Determine version
-        id: version
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          else
-            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-          fi
-
       - name: WordPress.org SVN deploy
         uses: 10up/action-wordpress-plugin-deploy@2.3.0
-        with:
-          version: ${{ steps.version.outputs.version }}
         env:
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
