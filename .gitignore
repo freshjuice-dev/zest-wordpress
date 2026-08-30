@@ -1,0 +1,17 @@
+# Build artifacts
+dist/
+languages/*.mo
+languages/*.po
+!languages/*.pot
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Misc
+*.log

@@ -1,0 +1,57 @@
+name: Deploy to WordPress.org SVN
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (e.g. 1.0.0)'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout plugin
+        uses: actions/checkout@v7
+
+      - name: Checkout Zest core repo
+        uses: actions/checkout@v7
+        with:
+          repository: freshjuice-dev/zest
+          path: ../zest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Build Zest core
+        working-directory: ../zest
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build plugin
+        run: ./scripts/build.sh
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: WordPress.org SVN deploy
+        uses: 10up/action-wordpress-plugin-deploy@2.3.0
+        with:
+          version: ${{ steps.version.outputs.version }}
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SLUG: zest-cmp
+          ASSETS_DIR: assets

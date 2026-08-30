@@ -1,0 +1,65 @@
+# Compatibility — minimum supported WP + minimum PHP
+# Usage: docker compose -f docker-compose.yml -f docker-compose.compat.yml up -d
+services:
+  wordpress:
+    image: wordpress:5.4-php7.4-apache
+    ports:
+      - "8890:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: 1
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_DEBUG_LOG', true);
+        define('WP_DEBUG_DISPLAY', false);
+    volumes:
+      - ./:/var/www/html/wp-content/plugins/zest-cmp
+      - wp-uploads-compat:/var/www/html/wp-content/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:5.7
+    platform: linux/amd64
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp
+      MYSQL_PASSWORD: wp
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db-data-compat:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  wp-cli:
+    image: wordpress:cli-php7.4
+    volumes:
+      - ./:/var/www/html/wp-content/plugins/zest-cmp
+      - wp-data-compat:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    entrypoint: |
+      /bin/sh -c '
+        sleep 5
+        wp core install --url=http://localhost:8890 --title="Zest CMP Compat" --admin_user=admin --admin_password=admin --admin_email=admin@example.com --allow-root
+        wp plugin activate zest-cmp --allow-root
+        wp rewrite flush --allow-root
+        echo "=== Compat (WP 5.4 + PHP 7.4) is ready ==="
+        echo "URL:  http://localhost:8890"
+        echo "Admin: http://localhost:8890/wp-admin (admin / admin)"
+        tail -f /dev/null
+      '
+
+volumes:
+  db-data-compat:
+  wp-uploads-compat:
+  wp-data-compat:
