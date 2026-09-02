@@ -49,7 +49,7 @@ jobs:
           cd /tmp && zip -rq "${{ github.workspace }}/zest-cmp.zip" zest-cmp
 
       - name: Attach zip to GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: zest-cmp.zip
           generate_release_notes: true
