@@ -49,9 +49,6 @@ final class Zest_CMP_Enqueue {
 
 		if ( file_exists( $local_file ) ) {
 			wp_enqueue_script( 'zest-cmp', $local_url, [], ZEST_CMP_VERSION, false );
-		} else {
-			$cdn_url = 'https://cdn.jsdelivr.net/npm/@freshjuice/zest@' . ZEST_CMP_ZEST_VERSION . '/dist/zest.min.js';
-			wp_enqueue_script( 'zest-cmp', $cdn_url, [], ZEST_CMP_ZEST_VERSION, false );
 		}
 	}
 

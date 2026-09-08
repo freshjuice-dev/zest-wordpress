@@ -15,7 +15,13 @@ services:
         define('WP_DEBUG_LOG', true);
         define('WP_DEBUG_DISPLAY', false);
     volumes:
-      - ./:/var/www/html/wp-content/plugins/zest-cmp
+      - ./zest-cmp.php:/var/www/html/wp-content/plugins/zest-cmp/zest-cmp.php
+      - ./uninstall.php:/var/www/html/wp-content/plugins/zest-cmp/uninstall.php
+      - ./readme.txt:/var/www/html/wp-content/plugins/zest-cmp/readme.txt
+      - ./LICENSE:/var/www/html/wp-content/plugins/zest-cmp/LICENSE
+      - ./includes:/var/www/html/wp-content/plugins/zest-cmp/includes
+      - ./dist:/var/www/html/wp-content/plugins/zest-cmp/dist
+      - ./languages:/var/www/html/wp-content/plugins/zest-cmp/languages
       - wp-uploads-compat:/var/www/html/wp-content/uploads
     depends_on:
       db:
@@ -40,7 +46,13 @@ services:
   wp-cli:
     image: wordpress:cli-php7.4
     volumes:
-      - ./:/var/www/html/wp-content/plugins/zest-cmp
+      - ./zest-cmp.php:/var/www/html/wp-content/plugins/zest-cmp/zest-cmp.php
+      - ./uninstall.php:/var/www/html/wp-content/plugins/zest-cmp/uninstall.php
+      - ./readme.txt:/var/www/html/wp-content/plugins/zest-cmp/readme.txt
+      - ./LICENSE:/var/www/html/wp-content/plugins/zest-cmp/LICENSE
+      - ./includes:/var/www/html/wp-content/plugins/zest-cmp/includes
+      - ./dist:/var/www/html/wp-content/plugins/zest-cmp/dist
+      - ./languages:/var/www/html/wp-content/plugins/zest-cmp/languages
       - wp-data-compat:/var/www/html
     depends_on:
       db:

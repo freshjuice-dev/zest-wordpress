@@ -39,13 +39,8 @@ final class Zest_CMP {
 	}
 
 	private function __construct() {
-		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
 		add_action( 'plugins_loaded', [ $this, 'init' ] );
 		add_filter( 'plugin_action_links_' . ZEST_CMP_BASENAME, [ $this, 'settings_link' ] );
-	}
-
-	public function load_textdomain(): void {
-		load_plugin_textdomain( 'zest-cmp', false, dirname( ZEST_CMP_BASENAME ) . '/languages' );
 	}
 
 	public function init(): void {

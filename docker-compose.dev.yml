@@ -2,7 +2,7 @@
 # Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 services:
   wordpress:
-    image: wordpress:6.8-php8.4-apache
+    image: wordpress:7.1-php8.4-apache
     ports:
       - "8889:80"
     environment:
@@ -15,7 +15,13 @@ services:
         define('WP_DEBUG_LOG', true);
         define('WP_DEBUG_DISPLAY', false);
     volumes:
-      - ./:/var/www/html/wp-content/plugins/zest-cmp
+      - ./zest-cmp.php:/var/www/html/wp-content/plugins/zest-cmp/zest-cmp.php
+      - ./uninstall.php:/var/www/html/wp-content/plugins/zest-cmp/uninstall.php
+      - ./readme.txt:/var/www/html/wp-content/plugins/zest-cmp/readme.txt
+      - ./LICENSE:/var/www/html/wp-content/plugins/zest-cmp/LICENSE
+      - ./includes:/var/www/html/wp-content/plugins/zest-cmp/includes
+      - ./dist:/var/www/html/wp-content/plugins/zest-cmp/dist
+      - ./languages:/var/www/html/wp-content/plugins/zest-cmp/languages
       - wp-uploads-dev:/var/www/html/wp-content/uploads
     depends_on:
       db:
@@ -39,8 +45,14 @@ services:
   wp-cli:
     image: wordpress:cli-php8.2
     volumes:
-      - ./:/var/www/html/wp-content/plugins/zest-cmp
-      - wp-data-dev:/var/www/html
+      - wp-data:/var/www/html
+      - ./zest-cmp.php:/var/www/html/wp-content/plugins/zest-cmp/zest-cmp.php
+      - ./uninstall.php:/var/www/html/wp-content/plugins/zest-cmp/uninstall.php
+      - ./readme.txt:/var/www/html/wp-content/plugins/zest-cmp/readme.txt
+      - ./LICENSE:/var/www/html/wp-content/plugins/zest-cmp/LICENSE
+      - ./includes:/var/www/html/wp-content/plugins/zest-cmp/includes
+      - ./dist:/var/www/html/wp-content/plugins/zest-cmp/dist
+      - ./languages:/var/www/html/wp-content/plugins/zest-cmp/languages
     depends_on:
       db:
         condition: service_healthy
@@ -49,10 +61,14 @@ services:
     entrypoint: |
       /bin/sh -c '
         sleep 5
+        until wp core is-installed --allow-root 2>/dev/null; do
+          if [ -f /var/www/html/wp-includes/version.php ]; then break; fi
+          sleep 2
+        done
         wp core install --url=http://localhost:8889 --title="Zest CMP Dev" --admin_user=admin --admin_password=admin --admin_email=admin@example.com --allow-root
         wp plugin activate zest-cmp --allow-root
         wp rewrite flush --allow-root
-        echo "=== Dev (WP 6.8 + PHP 8.4) is ready ==="
+        echo "=== Dev (WP 7.1 + PHP 8.4) is ready ==="
         echo "URL:  http://localhost:8889"
         echo "Admin: http://localhost:8889/wp-admin (admin / admin)"
         tail -f /dev/null
@@ -61,4 +77,3 @@ services:
 volumes:
   db-data-dev:
   wp-uploads-dev:
-  wp-data-dev:

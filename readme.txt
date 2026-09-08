@@ -1,8 +1,8 @@
 === Zest CMP ===
 Contributors: freshjuice4dev, reatlat
-Tags: cookies, consent, gdpr, ccpa, privacy, cookie-consent, cookie-banner, cmp
+Tags: cookies, consent, gdpr, privacy, cookie-banner
 Requires at least: 5.2
-Tested up to: 6.8
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPL-3.0-or-later

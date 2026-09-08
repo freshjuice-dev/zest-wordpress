@@ -137,6 +137,11 @@ final class Zest_CMP_Settings {
 	}
 
 	public function render_page(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'zest-cmp' ) );
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only tab navigation, no state change.
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'overview';
 		?>
 		<div class="wrap">
@@ -214,7 +219,7 @@ final class Zest_CMP_Settings {
 				<tr><th><?php esc_html_e( 'Theme', 'zest-cmp' ); ?></th><td><?php echo esc_html( $settings['theme'] ); ?></td></tr>
 				<tr>
 					<th><?php esc_html_e( 'Script source', 'zest-cmp' ); ?></th>
-					<td><?php echo $bundle ? esc_html__( 'Self-hosted (dist/zest.min.js)', 'zest-cmp' ) : esc_html__( 'CDN fallback (jsDelivr)', 'zest-cmp' ); ?></td>
+					<td><?php echo esc_html__( 'Self-hosted (dist/zest.min.js)', 'zest-cmp' ); ?></td>
 				</tr>
 				<tr><th><?php esc_html_e( 'Plugin version', 'zest-cmp' ); ?></th><td><?php echo esc_html( ZEST_CMP_VERSION ); ?></td></tr>
 				<tr><th><?php esc_html_e( 'Zest library version', 'zest-cmp' ); ?></th><td><?php echo esc_html( ZEST_CMP_ZEST_VERSION ); ?></td></tr>
@@ -335,9 +340,10 @@ final class Zest_CMP_Settings {
 		}
 
 		$options = Zest_CMP_Enqueue::get_instance()->build_config( $this->sanitize( array_merge( $this->get_settings(), $input ) ) );
-		$src     = file_exists( ZEST_CMP_DIR . 'dist/zest.min.js' )
-			? ZEST_CMP_URL . 'dist/zest.min.js'
-			: 'https://cdn.jsdelivr.net/npm/@freshjuice/zest@' . ZEST_CMP_ZEST_VERSION . '/dist/zest.min.js';
+		$src     = ZEST_CMP_URL . 'dist/zest.min.js';
+
+		wp_enqueue_script( 'zest-cmp-preview', $src, [], ZEST_CMP_ZEST_VERSION, false );
+		wp_add_inline_script( 'zest-cmp-preview', 'try{Zest.reset();Zest.init(window.ZestConfig);}catch(e){}' );
 
 		header( 'Content-Type: text/html; charset=utf-8' );
 		?>
@@ -354,7 +360,7 @@ window.addEventListener( 'message', function( e ) {
 	}
 } );
 </script>
-<script src="<?php echo esc_url( $src ); ?>" onload="try{Zest.reset();Zest.init(window.ZestConfig);}catch(e){}"></script>
+<?php wp_print_scripts( 'zest-cmp-preview' ); ?>
 </body>
 </html>
 		<?php
@@ -395,6 +401,7 @@ window.addEventListener( 'message', function( e ) {
 	private function render_settings_tab(): void {
 		$settings = $this->get_settings();
 		wp_enqueue_style( 'wp-components' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only confirmation flag; the reset action itself is nonce-verified.
 		if ( isset( $_GET['zest-reset'] ) && '1' === $_GET['zest-reset'] ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Zest settings have been reset to defaults.', 'zest-cmp' ) . '</p></div>';
 		}
@@ -434,7 +441,9 @@ window.addEventListener( 'message', function( e ) {
 				settings_fields( 'zest_cmp_group' );
 				?>
 				<div class="postbox zest-card">
-					<div class="postbox-header"><h2 class="hndle"><?php esc_html_e( 'General', 'zest-cmp' ); ?></h2><div class="handle-actions hide-if-no-js"><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text"><?php printf( esc_html__( /* translators: %s: card title */ 'Toggle panel: %s', 'zest-cmp' ), esc_html( 'General' ) ); ?></span><span class="toggle-indicator" aria-hidden="true"></span></button></div></div>
+					<div class="postbox-header"><h2 class="hndle"><?php esc_html_e( 'General', 'zest-cmp' ); ?></h2><div class="handle-actions hide-if-no-js"><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text"><?php
+				/* translators: %s: card title */
+				printf( esc_html__( 'Toggle panel: %s', 'zest-cmp' ), esc_html( 'General' ) ); ?></span><span class="toggle-indicator" aria-hidden="true"></span></button></div></div>
 					<div class="zest-form-grid" style="padding:0 16px 8px">
 				<?php
 				$this->render_section_fields( [
@@ -455,7 +464,9 @@ window.addEventListener( 'message', function( e ) {
 				</div>
 
 				<div class="postbox zest-card">
-					<div class="postbox-header"><h2 class="hndle"><?php esc_html_e( 'Appearance', 'zest-cmp' ); ?></h2><div class="handle-actions hide-if-no-js"><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text"><?php printf( esc_html__( 'Toggle panel: %s', 'zest-cmp' ), esc_html( 'Appearance' ) ); ?></span><span class="toggle-indicator" aria-hidden="true"></span></button></div></div>
+					<div class="postbox-header"><h2 class="hndle"><?php esc_html_e( 'Appearance', 'zest-cmp' ); ?></h2><div class="handle-actions hide-if-no-js"><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text"><?php
+				/* translators: %s: card title */
+				printf( esc_html__( 'Toggle panel: %s', 'zest-cmp' ), esc_html( 'Appearance' ) ); ?></span><span class="toggle-indicator" aria-hidden="true"></span></button></div></div>
 					<div class="zest-form-grid" style="padding:0 16px 8px">
 				<?php
 				$this->render_section_fields( [
@@ -486,7 +497,9 @@ window.addEventListener( 'message', function( e ) {
 				</div>
 
 				<div class="postbox zest-card">
-					<div class="postbox-header"><h2 class="hndle"><?php esc_html_e( 'Advanced', 'zest-cmp' ); ?></h2><div class="handle-actions hide-if-no-js"><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text"><?php printf( esc_html__( 'Toggle panel: %s', 'zest-cmp' ), esc_html( 'Advanced' ) ); ?></span><span class="toggle-indicator" aria-hidden="true"></span></button></div></div>
+					<div class="postbox-header"><h2 class="hndle"><?php esc_html_e( 'Advanced', 'zest-cmp' ); ?></h2><div class="handle-actions hide-if-no-js"><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text"><?php
+				/* translators: %s: card title */
+				printf( esc_html__( 'Toggle panel: %s', 'zest-cmp' ), esc_html( 'Advanced' ) ); ?></span><span class="toggle-indicator" aria-hidden="true"></span></button></div></div>
 					<div class="zest-form-grid" style="padding:0 16px 8px">
 				<?php
 				$this->render_section_fields( [

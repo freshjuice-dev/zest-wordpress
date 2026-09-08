@@ -63,4 +63,4 @@ jobs:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SLUG: zest-cmp
           ASSETS_DIR: assets
-          EXCLUDE: scripts,README.md,DEVELOPMENT.md,zest-core
+          EXCLUDE: scripts,README.md,DEVELOPMENT.md,zest-core,.github,.gitignore
