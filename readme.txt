@@ -51,8 +51,7 @@ No. Zest is 100% free and open source. This plugin is GPL-3.0-or-later; the bund
 == Screenshots ==
 
 1. The consent banner with default settings
-2. The settings modal with category toggles
-3. The plugin settings page in WordPress admin
+2. The plugin settings page in WordPress admin
 
 == Changelog ==
 
