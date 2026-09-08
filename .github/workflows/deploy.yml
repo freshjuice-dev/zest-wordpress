@@ -45,7 +45,7 @@ jobs:
       - name: Build release zip
         run: |
           mkdir -p /tmp/zest-cmp
-          rsync -a --exclude '.git*' --exclude '.github' --exclude 'node_modules' --exclude 'zest-core' --exclude 'docker-compose*.yml' --exclude 'DEVELOPMENT.md' ./ /tmp/zest-cmp/
+          rsync -a --exclude '.git*' --exclude '.github' --exclude 'node_modules' --exclude 'zest-core' --exclude 'scripts' --exclude 'assets' --exclude 'docker-compose*.yml' --exclude 'DEVELOPMENT.md' --exclude 'README.md' ./ /tmp/zest-cmp/
           cd /tmp && zip -rq "${{ github.workspace }}/zest-cmp.zip" zest-cmp
 
       - name: Attach zip to GitHub release
@@ -63,4 +63,4 @@ jobs:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SLUG: zest-cmp
           ASSETS_DIR: assets
-          EXCLUDE: zest-core
+          EXCLUDE: scripts,README.md,DEVELOPMENT.md,zest-core
