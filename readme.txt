@@ -1,5 +1,5 @@
 === Zest CMP ===
-Contributors: freshjuice, reatlat
+Contributors: freshjuice4dev, reatlat
 Tags: cookies, consent, gdpr, ccpa, privacy, cookie-consent, cookie-banner, cmp
 Requires at least: 5.2
 Tested up to: 6.8
