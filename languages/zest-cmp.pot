@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-3.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Zest CMP 1.0.0\n"
+"Project-Id-Version: Zest CMP 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/zest-cmp\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-30T21:59:45+00:00\n"
+"POT-Creation-Date: 2026-10-04T14:49:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: zest-cmp\n"
@@ -34,29 +34,33 @@ msgstr ""
 msgid "https://freshjuice.dev"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:131
 #: includes/class-zest-cmp-settings.php:132
+#: includes/class-zest-cmp-settings.php:133
 msgid "Cookie Consent"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:146
+#: includes/class-zest-cmp-settings.php:142
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/class-zest-cmp-settings.php:152
 msgid "Overview"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:147
-#: zest-cmp.php:58
+#: includes/class-zest-cmp-settings.php:153
+#: zest-cmp.php:53
 msgid "Settings"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:151
+#: includes/class-zest-cmp-settings.php:157
 msgid "Save Changes"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:152
+#: includes/class-zest-cmp-settings.php:158
 msgid "Reset all Zest settings to defaults? This cannot be undone."
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:152
+#: includes/class-zest-cmp-settings.php:158
 msgid "Reset to defaults"
 msgstr ""
 
@@ -68,380 +72,363 @@ msgstr ""
 msgid "Knowledge base"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:196
-msgid "From the blog"
-msgstr ""
-
-#: includes/class-zest-cmp-settings.php:197
-#: includes/class-zest-cmp-settings.php:267
-msgid "Changelog"
-msgstr ""
-
-#: includes/class-zest-cmp-settings.php:211
+#: includes/class-zest-cmp-settings.php:209
 msgid "Banner"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:211
-#: includes/class-zest-cmp-settings.php:668
+#: includes/class-zest-cmp-settings.php:209
+#: includes/class-zest-cmp-settings.php:492
 msgid "Enabled"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:211
-#: includes/class-zest-cmp-settings.php:669
+#: includes/class-zest-cmp-settings.php:209
+#: includes/class-zest-cmp-settings.php:493
 msgid "Disabled"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:212
-#: includes/class-zest-cmp-settings.php:442
+#: includes/class-zest-cmp-settings.php:210
+#: includes/class-zest-cmp-settings.php:351
 msgid "Script blocking mode"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:213
-#: includes/class-zest-cmp-settings.php:462
+#: includes/class-zest-cmp-settings.php:211
+#: includes/class-zest-cmp-settings.php:373
 msgid "Banner position"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:214
-#: includes/class-zest-cmp-settings.php:463
+#: includes/class-zest-cmp-settings.php:212
+#: includes/class-zest-cmp-settings.php:374
 msgid "Theme"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:216
+#: includes/class-zest-cmp-settings.php:214
 msgid "Script source"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:217
+#: includes/class-zest-cmp-settings.php:215
 msgid "Self-hosted (dist/zest.min.js)"
 msgstr ""
 
 #: includes/class-zest-cmp-settings.php:217
-msgid "CDN fallback (jsDelivr)"
-msgstr ""
-
-#: includes/class-zest-cmp-settings.php:219
 msgid "Plugin version"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:220
+#: includes/class-zest-cmp-settings.php:218
 msgid "Zest library version"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:231
+#: includes/class-zest-cmp-settings.php:229
 msgid "Getting started"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:232
+#: includes/class-zest-cmp-settings.php:230
 msgid "Script blocking"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:233
+#: includes/class-zest-cmp-settings.php:231
 msgid "Configuration"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:234
+#: includes/class-zest-cmp-settings.php:232
 msgid "Consent events"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:235
-#: includes/class-zest-cmp-settings.php:269
+#: includes/class-zest-cmp-settings.php:233
 msgid "Learn about compliance"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:236
+#: includes/class-zest-cmp-settings.php:234
 msgid "All documentation"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:265
-msgid "Blog"
-msgstr ""
-
-#: includes/class-zest-cmp-settings.php:281
-msgid "Feed is temporarily unavailable."
-msgstr ""
-
-#: includes/class-zest-cmp-settings.php:399
+#: includes/class-zest-cmp-settings.php:335
 msgid "Zest settings have been reset to defaults."
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:437
+#: includes/class-zest-cmp-settings.php:344
 msgid "General"
 msgstr ""
 
 #. translators: %s: card title
-#: includes/class-zest-cmp-settings.php:437
-#: includes/class-zest-cmp-settings.php:458
-#: includes/class-zest-cmp-settings.php:489
+#: includes/class-zest-cmp-settings.php:346
+#: includes/class-zest-cmp-settings.php:369
+#: includes/class-zest-cmp-settings.php:402
 msgid "Toggle panel: %s"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:441
+#: includes/class-zest-cmp-settings.php:350
 msgid "Enable Zest consent banner"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:443
+#: includes/class-zest-cmp-settings.php:352
 msgid "Do Not Track / GPC signal"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:444
+#: includes/class-zest-cmp-settings.php:353
 msgid "Respect — auto-reject non-essential"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:445
+#: includes/class-zest-cmp-settings.php:354
 msgid "Respect — show banner, non-essential unchecked"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:446
+#: includes/class-zest-cmp-settings.php:355
 msgid "Ignore the browser privacy signal"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:447
+#: includes/class-zest-cmp-settings.php:356
 msgid "What to do when the visitor's browser sends a Do Not Track or Global Privacy Control signal."
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:448
+#: includes/class-zest-cmp-settings.php:357
 msgid "Consent expiration (days)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:449
+#: includes/class-zest-cmp-settings.php:358
 msgid "Show floating widget after consent"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:450
+#: includes/class-zest-cmp-settings.php:359
 msgid "Privacy policy URL"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:451
+#: includes/class-zest-cmp-settings.php:360
 msgid "Imprint / legal URL"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:458
+#: includes/class-zest-cmp-settings.php:367
 msgid "Appearance"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:464
+#: includes/class-zest-cmp-settings.php:375
 msgid "Language"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:465
+#: includes/class-zest-cmp-settings.php:376
 msgid "Accent color"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:466
+#: includes/class-zest-cmp-settings.php:377
 msgid "Button style"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:467
+#: includes/class-zest-cmp-settings.php:378
 msgid "Fill (solid)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:468
+#: includes/class-zest-cmp-settings.php:379
 msgid "Outline (bordered)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:470
+#: includes/class-zest-cmp-settings.php:381
 msgid "Button layout"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:471
+#: includes/class-zest-cmp-settings.php:382
 msgid "Row (default)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:472
+#: includes/class-zest-cmp-settings.php:383
 msgid "Split"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:473
+#: includes/class-zest-cmp-settings.php:384
 msgid "Split modern"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:475
+#: includes/class-zest-cmp-settings.php:386
 msgid "Backdrop blur (px)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:476
+#: includes/class-zest-cmp-settings.php:387
 msgid "Corner radius (px)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:477
+#: includes/class-zest-cmp-settings.php:388
 msgid "Background"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:478
+#: includes/class-zest-cmp-settings.php:389
 msgid "Secondary background"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:479
+#: includes/class-zest-cmp-settings.php:390
 msgid "Text"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:480
+#: includes/class-zest-cmp-settings.php:391
 msgid "Secondary text"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:481
+#: includes/class-zest-cmp-settings.php:392
 msgid "Border"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:482
+#: includes/class-zest-cmp-settings.php:393
 msgid "Hard wall — block page interaction until visitor decides"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:489
+#: includes/class-zest-cmp-settings.php:400
 msgid "Advanced"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:493
+#: includes/class-zest-cmp-settings.php:406
 msgid "Remove categories from settings modal"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:494
+#: includes/class-zest-cmp-settings.php:407
 msgid "Functional"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:495
+#: includes/class-zest-cmp-settings.php:408
 msgid "Analytics"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:496
+#: includes/class-zest-cmp-settings.php:409
 msgid "Marketing"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:497
+#: includes/class-zest-cmp-settings.php:410
 msgid "Hidden categories are forced to rejected. Essential is always shown."
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:498
+#: includes/class-zest-cmp-settings.php:411
 msgid "Always-blocked domains (one per line, *.wild ok)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:499
+#: includes/class-zest-cmp-settings.php:412
 msgid "Always-allowed domains (one per line, overrides blocking)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:500
+#: includes/class-zest-cmp-settings.php:413
 msgid "Custom CSS (injected into Shadow DOM)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:501
+#: includes/class-zest-cmp-settings.php:414
 msgid "Geo / jurisdiction gating"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:502
+#: includes/class-zest-cmp-settings.php:415
 msgid "Off — show the banner to everyone"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:503
+#: includes/class-zest-cmp-settings.php:416
 msgid "Gateway — GDPR banner in the EU/EEA/UK, notice in US states"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:504
-msgid "Visitors outside regulated regions never see the banner and no consent cookie is set. Uses the hosted zest-geo gateway (geo.cookiezest.com) — no tracking, only country-level lookup."
+#. translators: %s: zest-geo gateway Terms of Service link
+#: includes/class-zest-cmp-settings.php:419
+msgid "Visitors outside regulated regions never see the banner and no consent cookie is set. Uses the hosted zest-geo gateway (geo.cookiezest.com) — no tracking, only country-level lookup. See the gateway %s."
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:505
+#: includes/class-zest-cmp-settings.php:420
+msgid "Terms of Service"
+msgstr ""
+
+#: includes/class-zest-cmp-settings.php:422
 msgid "Show some love for open source"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:506
+#: includes/class-zest-cmp-settings.php:423
 msgid "Keep the credit — thank you! (default)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:507
+#: includes/class-zest-cmp-settings.php:424
 msgid "Hide it (we will cry quietly)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:508
+#: includes/class-zest-cmp-settings.php:425
 msgid "Credit in settings modal only"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:509
+#: includes/class-zest-cmp-settings.php:426
 msgid "Credit on banner only"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:513
+#: includes/class-zest-cmp-settings.php:430
 msgid "Zest is free, open source, and built in the open. The tiny credit helps other people find it — and keeps the project alive. Keep it on if you can."
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:522
+#: includes/class-zest-cmp-settings.php:437
 msgid "Live preview"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:523
+#: includes/class-zest-cmp-settings.php:438
 msgid "↻ Replay banner"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:525
+#: includes/class-zest-cmp-settings.php:440
 msgid "Live banner preview"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:526
+#: includes/class-zest-cmp-settings.php:441
 msgid "Updates ~600ms after you change any setting. Blocked scripts and consent state are not simulated here."
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:697
+#: includes/class-zest-cmp-settings.php:521
 msgid "Selected color value"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:728
+#: includes/class-zest-cmp-settings.php:552
 msgid "Bottom (centered)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:729
+#: includes/class-zest-cmp-settings.php:553
 msgid "Bottom left"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:730
+#: includes/class-zest-cmp-settings.php:554
 msgid "Bottom right"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:731
+#: includes/class-zest-cmp-settings.php:555
 msgid "Top (centered)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:732
+#: includes/class-zest-cmp-settings.php:556
 msgid "Top left"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:733
+#: includes/class-zest-cmp-settings.php:557
 msgid "Top right"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:734
+#: includes/class-zest-cmp-settings.php:558
 msgid "Center (overlay)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:741
+#: includes/class-zest-cmp-settings.php:565
 msgid "Auto (system)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:742
+#: includes/class-zest-cmp-settings.php:566
 msgid "Light"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:743
+#: includes/class-zest-cmp-settings.php:567
 msgid "Dark"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:744
+#: includes/class-zest-cmp-settings.php:568
 msgid "Custom (override colors)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:751
+#: includes/class-zest-cmp-settings.php:575
 msgid "Safe — blocks known trackers, allows the rest (recommended)"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:752
+#: includes/class-zest-cmp-settings.php:576
 msgid "Manual — only blocks domains you list"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:753
+#: includes/class-zest-cmp-settings.php:577
 msgid "Strict — blocks everything non-essential"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:754
+#: includes/class-zest-cmp-settings.php:578
 msgid "Doomsday — blocks all third-party scripts"
 msgstr ""
 
-#: includes/class-zest-cmp-settings.php:761
+#: includes/class-zest-cmp-settings.php:585
 msgid "Auto-detect"
 msgstr ""

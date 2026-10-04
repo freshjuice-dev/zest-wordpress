@@ -58,6 +58,7 @@ final class Zest_CMP_Settings {
 		add_action( 'admin_init', [ $this, 'register_settings' ] );
 		add_action( 'admin_init', [ $this, 'register_widgets' ] );
 		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'admin_assets' ] );
 		add_action( 'wp_ajax_zest_preview', [ $this, 'render_preview_endpoint' ] );
 		add_action( 'admin_post_zest_reset', [ $this, 'handle_reset' ] );
 	}
@@ -168,13 +169,7 @@ final class Zest_CMP_Settings {
 	}
 
 	private function render_overview_tab(): void {
-		$enabled = ! empty( $this->get_settings()['enabled'] );
-		wp_enqueue_style( 'dashboard' );
 		?>
-		<style>
-			/* Overview widgets are fixed — hide core's reorder/toggle action cluster. */
-			#dashboard-widgets .handle-actions { display: none; }
-		</style>
 		<div id="dashboard-widgets" class="metabox-holder">
 			<div id="postbox-container-1" class="postbox-container">
 				<?php do_meta_boxes( 'zest_cmp_overview', 'normal', '' ); ?>
@@ -198,8 +193,6 @@ final class Zest_CMP_Settings {
 		$screen = 'zest_cmp_overview';
 		add_meta_box( 'zest_status', __( 'Status', 'zest-cmp' ), [ $this, 'render_status_widget' ], $screen, 'normal', 'high' );
 		add_meta_box( 'zest_kb', __( 'Knowledge base', 'zest-cmp' ), [ $this, 'render_kb_widget' ], $screen, 'side', 'high' );
-		add_meta_box( 'zest_blog', __( 'From the blog', 'zest-cmp' ), [ $this, 'render_blog_widget' ], $screen, 'column3', 'high' );
-		add_meta_box( 'zest_changelog', __( 'Changelog', 'zest-cmp' ), [ $this, 'render_changelog_widget' ], $screen, 'column3', 'low' );
 	}
 
 	/**
@@ -248,56 +241,25 @@ final class Zest_CMP_Settings {
 	}
 
 	/**
-	 * Blog feed widget.
-	 */
-	public function render_blog_widget(): void {
-		$feeds = $this->get_feeds();
-		echo '<div class="rss-widget">';
-		$this->render_feed_items( $feeds['blog'] ?? [] );
-		echo '</div>';
-	}
-
-	/**
-	 * Changelog feed widget.
-	 */
-	public function render_changelog_widget(): void {
-		$feeds = $this->get_feeds();
-		echo '<div class="rss-widget">';
-		$this->render_feed_items( $feeds['changelog'] ?? [] );
-		echo '</div>';
-		?>
-		<p class="community-events-footer" style="border-top:1px solid #f0f0f1;padding-top:8px">
-			<a href="https://cookiezest.com/blog/" target="_blank"><?php esc_html_e( 'Blog', 'zest-cmp' ); ?> <span class="screen-reader-text"> (opens in a new tab)</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
-			|
-			<a href="https://cookiezest.com/changelog/" target="_blank"><?php esc_html_e( 'Changelog', 'zest-cmp' ); ?> <span class="screen-reader-text"> (opens in a new tab)</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
-			|
-			<a href="https://cookiezest.com/learn/" target="_blank"><?php esc_html_e( 'Learn about compliance', 'zest-cmp' ); ?> <span class="screen-reader-text"> (opens in a new tab)</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a>
-		</p>
-		<?php
-	}
-
-	/**
-	 * Render feed items in the WordPress dashboard RSS-widget style.
+	 * Enqueue admin styles/scripts on the plugin settings screen only.
 	 *
-	 * @param array<int, array<string, mixed>> $items Feed items.
+	 * @param string $hook_suffix Current admin page hook.
 	 */
-	private function render_feed_items( array $items ): void {
-		if ( empty( $items ) ) {
-			echo '<p style="color:#646970">' . esc_html__( 'Feed is temporarily unavailable.', 'zest-cmp' ) . '</p>';
+	public function admin_assets( string $hook_suffix ): void {
+		if ( false === strpos( $hook_suffix, 'zest-cmp' ) ) {
 			return;
 		}
-		$date_format = get_option( 'date_format' );
-		echo '<ul>';
-		foreach ( $items as $item ) {
-			echo '<li>';
-			echo '<a class="rsswidget" href="' . esc_url( $item['url'] ?? '' ) . '" target="_blank">' . esc_html( $item['title'] ?? '' ) . '</a>';
-			echo ' <span class="rss-date">' . esc_html( date_i18n( $date_format, strtotime( $item['date_published'] ?? '' ) ) ) . '</span>';
-			if ( ! empty( $item['summary'] ) ) {
-				echo '<div class="rssSummary">' . esc_html( wp_html_excerpt( $item['summary'], 120, '…' ) ) . '</div>';
-			}
-			echo '</li>';
-		}
-		echo '</ul>';
+
+		// Overview tab: hide core's widget reorder/toggle cluster (widgets are fixed).
+		wp_enqueue_style( 'dashboard' );
+		wp_add_inline_style( 'dashboard', '#dashboard-widgets .handle-actions{display:none}' );
+
+		wp_enqueue_style( 'zest-cmp-admin', ZEST_CMP_URL . 'includes/admin.css', [], ZEST_CMP_VERSION );
+		wp_enqueue_script( 'zest-cmp-admin', ZEST_CMP_URL . 'includes/admin.js', [], ZEST_CMP_VERSION, true );
+		wp_localize_script( 'zest-cmp-admin', 'zestAdmin', [
+			'nonce'      => wp_create_nonce( 'zest_preview' ),
+			'previewUrl' => admin_url( 'admin-ajax.php?action=zest_preview' ),
+		] );
 	}
 
 	/**
@@ -308,7 +270,6 @@ final class Zest_CMP_Settings {
 			wp_die();
 		}
 		delete_option( $this->option_name );
-		delete_transient( 'zest_cmp_feeds' );
 		wp_safe_redirect( add_query_arg( [ 'page' => 'zest-cmp', 'tab' => 'settings', 'zest-reset' => '1' ], admin_url( 'options-general.php' ) ) );
 		exit;
 	}
@@ -367,75 +328,14 @@ window.addEventListener( 'message', function( e ) {
 		wp_die();
 	}
 
-	/**
-	 * Fetch blog + changelog JSON feeds from cookiezest.com, cached 12h.
-	 *
-	 * @return array{blog?: array<int, array<string, mixed>>, changelog?: array<int, array<string, mixed>>}
-	 */
-	private function get_feeds(): array {
-		$cached = get_transient( 'zest_cmp_feeds' );
-		if ( is_array( $cached ) ) {
-			return $cached;
-		}
-
-		$feeds = [];
-		foreach ( [ 'blog', 'changelog' ] as $slug ) {
-			$response = wp_remote_get( 'https://cookiezest.com/' . $slug . '/feed.json', [ 'timeout' => 10 ] );
-			if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-				continue;
-			}
-			$data = json_decode( wp_remote_retrieve_body( $response ), true );
-			if ( ! is_array( $data['items'] ?? null ) ) {
-				continue;
-			}
-			$feeds[ $slug ] = array_slice( $data['items'], 0, 3 );
-		}
-
-		if ( ! empty( $feeds ) ) {
-			set_transient( 'zest_cmp_feeds', $feeds, 12 * HOUR_IN_SECONDS );
-		}
-
-		return $feeds;
-	}
-
 	private function render_settings_tab(): void {
-		$settings = $this->get_settings();
 		wp_enqueue_style( 'wp-components' );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only confirmation flag; the reset action itself is nonce-verified.
 		if ( isset( $_GET['zest-reset'] ) && '1' === $_GET['zest-reset'] ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Zest settings have been reset to defaults.', 'zest-cmp' ) . '</p></div>';
 		}
 		?>
-			<style>
-				.zest-builder { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin-top: 12px; }
-				.zest-builder > form { flex: 1 1 540px; min-width: 0; margin: 0; display: grid; grid-template-columns: 1fr; }
-				.zest-card { background: #fff; border: 1px solid #c3c4c7; min-width: 0; }
-				.postbox.zest-card.closed > .zest-form-grid { display: none; }
-				.zest-preview-pane { flex: 1 1 520px; min-width: 0; position: sticky; top: 46px; }
-				@media (max-width: 1100px) { .zest-preview-pane { position: static; } }
-				.zest-form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 20px; }
-				.zest-form-grid .form-table, .zest-form-grid .form-table tbody { display: contents; }
-				.zest-form-grid .form-table tr { display: block; margin: 0; }
-				.zest-form-grid .form-table tr.zest-row-wide { grid-column: 1 / -1; }
-				.zest-form-grid .form-table th { display: block; width: auto; padding: 10px 0 4px; font-weight: 600; }
-				.zest-form-grid .form-table td { display: block; padding: 0 0 10px; }
-				.zest-form-grid .form-table td input[type="text"], .zest-form-grid .form-table td input[type="url"], .zest-form-grid .form-table td input[type="number"], .zest-form-grid .form-table td select, .zest-form-grid .form-table td textarea { width: 100%; max-width: 100%; }
-				.zest-form-grid .form-table td input[type="color"] { width: 34px; height: 34px; padding: 2px; border-radius: 4px; cursor: pointer; }
-				.zest-color-row { display: inline-flex; gap: 6px; align-items: center; width: 100%; max-width: 100%; }
-				.zest-color-row .zest-color-hex { flex: 1 1 0; min-width: 0; width: 100%; max-width: 100%; font-family: monospace; color: #646970; background: #f6f7f7; }
-				@media (max-width: 560px) { .zest-form-grid { grid-template-columns: 1fr; } }
-				/* WP components-form-toggle, CSS-driven (no React): :checked drives the state */
-				.zest-form-grid .components-form-toggle { display: inline-flex; }
-				.zest-form-grid .components-form-toggle input:checked ~ .components-form-toggle__track { background-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)); border-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)); }
-				.zest-form-grid .components-form-toggle input:checked ~ .components-form-toggle__thumb { background-color: #fff; border-width: 0; transform: translateX(16px); }
-				.zest-toggle-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
-				.zest-form-grid .form-table td select.zest-multi-select { width: 100%; max-width: 100%; }
-				.zest-form-grid .form-table tr.zest-row-wide > td select { width: calc(50% - 10px); min-width: 160px; }
-				.zest-form-grid .form-table tr.zest-row-toggle td { padding: 0 0 10px; }
-				.zest-toggle-line { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-				.zest-toggle-line .zest-toggle-label { font-weight: 400; }
-			</style>
-			<div class="zest-builder metabox-holder">
+		<div class="zest-builder metabox-holder">
 			<form method="post" action="options.php" id="zest-settings-form">
 				<?php
 				settings_fields( 'zest_cmp_group' );
@@ -514,7 +414,11 @@ window.addEventListener( 'message', function( e ) {
 					[ 'select', 'geo', __( 'Geo / jurisdiction gating', 'zest-cmp' ), [
 						'0'       => __( 'Off — show the banner to everyone', 'zest-cmp' ),
 						'gateway' => __( 'Gateway — GDPR banner in the EU/EEA/UK, notice in US states', 'zest-cmp' ),
-					], 'zest-row-wide', __( 'Visitors outside regulated regions never see the banner and no consent cookie is set. Uses the hosted zest-geo gateway (geo.cookiezest.com) — no tracking, only country-level lookup.', 'zest-cmp' ) ],
+					], 'zest-row-wide', sprintf(
+						/* translators: %s: zest-geo gateway Terms of Service link */
+						__( 'Visitors outside regulated regions never see the banner and no consent cookie is set. Uses the hosted zest-geo gateway (geo.cookiezest.com) — no tracking, only country-level lookup. See the gateway %s.', 'zest-cmp' ),
+						'<a href="https://cookiezest.com/terms/" target="_blank" rel="noopener">' . __( 'Terms of Service', 'zest-cmp' ) . '</a>'
+					) ],
 					[ 'select', 'branding', __( 'Show some love for open source', 'zest-cmp' ), [
 						'1'      => __( 'Keep the credit — thank you! (default)', 'zest-cmp' ),
 						'0'      => __( 'Hide it (we will cry quietly)', 'zest-cmp' ),
@@ -524,8 +428,6 @@ window.addEventListener( 'message', function( e ) {
 				] );
 				?>
 					<p class="description" style="margin:0 0 4px"><?php esc_html_e( 'Zest is free, open source, and built in the open. The tiny credit helps other people find it — and keeps the project alive. Keep it on if you can.', 'zest-cmp' ); ?></p>
-				<?php
-				?>
 					</div>
 				</div>
 			</form>
@@ -535,105 +437,14 @@ window.addEventListener( 'message', function( e ) {
 					<div class="postbox-header"><h2 class="hndle"><?php esc_html_e( 'Live preview', 'zest-cmp' ); ?></h2>
 					<div class="handle-actions hide-if-no-js"><button type="button" class="button-link" id="zest-replay" style="text-decoration:none; padding: 0 16px;"><?php esc_html_e( '↻ Replay banner', 'zest-cmp' ); ?></button></div></div>
 					<div class="inside" style="padding:0 16px">
-					<iframe id="zest-preview" title="<?php esc_attr_e( 'Live banner preview', 'zest-cmp' ); ?>" style="display:block;width:100%;height:560px;border:0;background:#f6f7f7" loading="lazy"></iframe>
-					<p class="description" style="padding:0 12px"><?php esc_html_e( 'Updates ~600ms after you change any setting. Blocked scripts and consent state are not simulated here.', 'zest-cmp' ); ?></p>
-					</div>
+						<iframe id="zest-preview" title="<?php esc_attr_e( 'Live banner preview', 'zest-cmp' ); ?>" style="display:block;width:100%;height:560px;border:0;background:#f6f7f7" loading="lazy"></iframe>
+						<p class="description" style="padding:0 12px"><?php esc_html_e( 'Updates ~600ms after you change any setting. Blocked scripts and consent state are not simulated here.', 'zest-cmp' ); ?></p>
 				</div>
 			</div>
-			</div>
-			<script>
-			// jQuery ready — form exists by then; keeps init off the mid-body inline run.
-			jQuery( function() {
-				// Native postbox collapse for settings cards.
-				jQuery( '.zest-card' ).each( function() {
-					var card = jQuery( this );
-					card.find( '.handlediv' ).on( 'click', function() {
-						var btn = jQuery( this );
-						var open = 'true' === btn.attr( 'aria-expanded' );
-						btn.attr( 'aria-expanded', open ? 'false' : 'true' );
-						card.toggleClass( 'closed', open );
-					} );
-				} );
-				var iframe = document.getElementById( 'zest-preview' );
-				var form   = iframe ? iframe.closest( '.wrap' ).querySelector( 'form' ) : null;
-				if ( ! iframe || ! form ) { return; }
-				var timer  = null;
-				var fields = form.querySelectorAll( 'input, select, textarea' );
-
-				// Mirror the live form values onto the preview config.
-				function collect() {
-					var cfg = {};
-					fields.forEach( function( el ) {
-						// Multi-checkbox groups (e.g. hide_categories[]) accumulate.
-						var g = el.name.match( /^zest_cmp_settings\[([a-z_]+)\]\[\]$/ );
-						if ( g ) {
-							if ( el.checked ) {
-								cfg[ g[1] ] = cfg[ g[1] ] ? cfg[ g[1] ] + ',' + el.value : el.value;
-							}
-							return;
-						}
-						var m = el.name.match( /^zest_cmp_settings\[([a-z_]+)\]$/ );
-						if ( ! m ) { return; }
-						var key = m[1];
-						if ( 'checkbox' === el.type ) {
-							cfg[key] = el.checked ? '1' : '';
-						} else {
-							cfg[key] = el.value;
-						}
-					} );
-					return cfg;
-				}
-
-				function reload() {
-					var q = new URLSearchParams();
-					var cfg = collect();
-					Object.keys( cfg ).forEach( function( k ) {
-						if ( '' !== cfg[k] ) {
-							q.set( 'zest_' + k, cfg[k] );
-						}
-					} );
-					q.set( '_wpnonce', '<?php echo esc_js( wp_create_nonce( 'zest_preview' ) ); ?>' );
-					iframe.src = '<?php echo esc_url( admin_url( 'admin-ajax.php?action=zest_preview' ) ); ?>' + '&' + q.toString();
-				}
-
-				function debounce() {
-					clearTimeout( timer );
-					timer = setTimeout( reload, 600 );
-				}
-
-				fields.forEach( function( el ) {
-					el.addEventListener( 'change', debounce );
-					el.addEventListener( 'input', debounce );
-				} );
-
-				document.getElementById( 'zest-replay' ).addEventListener( 'click', function() {
-					iframe.contentWindow.postMessage( { type: 'zest-reset' }, window.location.origin );
-				} );
-
-				// Custom-theme color cells only apply when theme = custom.
-				var themeSel = document.getElementById( 'zest_theme' );
-				function syncColorRows() {
-					var on = 'custom' === themeSel.value;
-					form.querySelectorAll( '.zest-color-cell' ).forEach( function( tr ) {
-						tr.style.display = on ? '' : 'none';
-					} );
-				}
-				themeSel.addEventListener( 'change', function() { syncColorRows(); debounce(); } );
-				syncColorRows();
-
-				// Mirror native color input value into the readonly hex field.
-				form.addEventListener( 'input', function( e ) {
-					if ( 'color' === e.target.type && e.target.name ) {
-						var hex = form.querySelector( '.zest-color-hex[data-for="' + e.target.id + '"]' );
-						if ( hex ) { hex.value = e.target.value; }
-					}
-				} );
-
-				reload();
-			} );
-			</script>
-			<?php
-			}
+		</div>
+	</div>
+		<?php
+	}
 
 	/**
 	 * Parse a newline/comma-separated domain list into a clean array.
@@ -727,7 +538,7 @@ window.addEventListener( 'message', function( e ) {
 			}
 
 			if ( ! empty( $field[5] ) ) {
-				echo '<p class="description">' . esc_html( $field[5] ) . '</p>';
+				echo '<p class="description">' . wp_kses( $field[5], [ 'a' => [ 'href' => [], 'target' => [], 'rel' => [] ] ] ) . '</p>';
 			}
 			echo '</td></tr>';
 		}

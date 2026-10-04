@@ -2,13 +2,8 @@
 /**
  * Enqueue class for Zest CMP.
  *
- * Injects the Zest JS bundle into <head> (synchronously, before any
- * tracking scripts) and outputs the window.ZestConfig object from the
- * plugin settings.
- *
- * The bundle is loaded from the plugin's dist/ directory (self-hosted,
- * no external CDN dependency). If the file doesn't exist yet (plugin
- * installed but build not run), it falls back to the CDN.
+ * Enqueues the self-hosted Zest JS bundle from dist/ and outputs the
+ * window.ZestConfig object as an inline script immediately before it.
  *
  * @package ZestCMP
  */
@@ -29,13 +24,10 @@ final class Zest_CMP_Enqueue {
 
 	private function __construct() {
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_bundle' ] );
-		add_action( 'wp_head', [ $this, 'output_config' ], 1 );
 	}
 
 	/**
-	 * Enqueue the Zest JS bundle. Uses the self-hosted dist/ file if it
-	 * exists, otherwise falls back to jsDelivr CDN pinned to the current
-	 * Zest version.
+	 * Enqueue the self-hosted bundle and print the config before it.
 	 */
 	public function enqueue_bundle(): void {
 		$options = Zest_CMP_Settings::get_instance()->get_settings();
@@ -44,29 +36,12 @@ final class Zest_CMP_Enqueue {
 			return;
 		}
 
-		$local_file = ZEST_CMP_DIR . 'dist/zest.min.js';
-		$local_url  = ZEST_CMP_URL . 'dist/zest.min.js';
-
-		if ( file_exists( $local_file ) ) {
-			wp_enqueue_script( 'zest-cmp', $local_url, [], ZEST_CMP_VERSION, false );
-		}
-	}
-
-	/**
-	 * Output window.ZestConfig before the Zest script loads.
-	 * Hooked into wp_head at priority 1 so it runs before the enqueued
-	 * script (which prints at default priority).
-	 */
-	public function output_config(): void {
-		$options = Zest_CMP_Settings::get_instance()->get_settings();
-
-		if ( empty( $options['enabled'] ) ) {
+		if ( ! file_exists( ZEST_CMP_DIR . 'dist/zest.min.js' ) ) {
 			return;
 		}
 
-		$config = $this->build_config( $options );
-
-		echo '<script>window.ZestConfig = ' . wp_json_encode( $config ) . ';</script>' . "\n";
+		wp_enqueue_script( 'zest-cmp', ZEST_CMP_URL . 'dist/zest.min.js', [], ZEST_CMP_VERSION, false );
+		wp_add_inline_script( 'zest-cmp', 'window.ZestConfig = ' . wp_json_encode( $this->build_config( $options ) ) . ';', 'before' );
 	}
 
 	/**

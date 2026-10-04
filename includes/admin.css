@@ -1,0 +1,27 @@
+.zest-builder { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; margin-top: 12px; }
+.zest-builder > form { flex: 1 1 540px; min-width: 0; margin: 0; display: grid; grid-template-columns: 1fr; }
+.zest-card { background: #fff; border: 1px solid #c3c4c7; min-width: 0; }
+.postbox.zest-card.closed > .zest-form-grid { display: none; }
+.zest-preview-pane { flex: 1 1 520px; min-width: 0; position: sticky; top: 46px; }
+@media (max-width: 1100px) { .zest-preview-pane { position: static; } }
+.zest-form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 20px; }
+.zest-form-grid .form-table, .zest-form-grid .form-table tbody { display: contents; }
+.zest-form-grid .form-table tr { display: block; margin: 0; }
+.zest-form-grid .form-table tr.zest-row-wide { grid-column: 1 / -1; }
+.zest-form-grid .form-table th { display: block; width: auto; padding: 10px 0 4px; font-weight: 600; }
+.zest-form-grid .form-table td { display: block; padding: 0 0 10px; }
+.zest-form-grid .form-table td input[type="text"], .zest-form-grid .form-table td input[type="url"], .zest-form-grid .form-table td input[type="number"], .zest-form-grid .form-table td select, .zest-form-grid .form-table td textarea { width: 100%; max-width: 100%; }
+.zest-form-grid .form-table td input[type="color"] { width: 34px; height: 34px; padding: 2px; border-radius: 4px; cursor: pointer; }
+.zest-color-row { display: inline-flex; gap: 6px; align-items: center; width: 100%; max-width: 100%; }
+.zest-color-row .zest-color-hex { flex: 1 1 0; min-width: 0; width: 100%; max-width: 100%; font-family: monospace; color: #646970; background: #f6f7f7; }
+@media (max-width: 560px) { .zest-form-grid { grid-template-columns: 1fr; } }
+/* WP components-form-toggle, CSS-driven (no React): :checked drives the state */
+.zest-form-grid .components-form-toggle { display: inline-flex; }
+.zest-form-grid .components-form-toggle input:checked ~ .components-form-toggle__track { background-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)); border-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)); }
+.zest-form-grid .components-form-toggle input:checked ~ .components-form-toggle__thumb { background-color: #fff; border-width: 0; transform: translateX(16px); }
+.zest-toggle-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+.zest-form-grid .form-table td select.zest-multi-select { width: 100%; max-width: 100%; }
+.zest-form-grid .form-table tr.zest-row-wide > td select { width: calc(50% - 10px); min-width: 160px; }
+.zest-form-grid .form-table tr.zest-row-toggle td { padding: 0 0 10px; }
+.zest-toggle-line { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.zest-toggle-line .zest-toggle-label { font-weight: 400; }

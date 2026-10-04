@@ -4,7 +4,7 @@ Tags: cookies, consent, gdpr, privacy, cookie-banner
 Requires at least: 5.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPL-3.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -27,6 +27,14 @@ Zest CMP integrates the [Zest](https://cookiezest.com/) consent toolkit into Wor
 * **Backdrop blur** — optional frosted-glass effect on the modal and wall overlay.
 * **Hidden categories** — remove unused consent categories from the settings modal. Hidden categories are forced to rejected.
 * **Zero dependencies** — vanilla JavaScript, no jQuery, no React, nothing.
+
+== External services ==
+
+By default this plugin is fully self-contained and makes no network requests of its own.
+
+If you enable **Geo / jurisdiction gating** in the settings, the visitor's browser requests `geo.cookiezest.com` once to look up which privacy regulations apply in the visitor's country, so the right consent banner is shown (full banner in the EU/EEA/UK, notice in regulated US states, nothing elsewhere). The lookup sends the visitor's IP address to the gateway at the time of the request, and the gateway returns only regulation flags — it is not a tracking service and the IP is not logged or stored by it. See the gateway's [privacy notes](https://cookiezest.com/privacy/) and [terms](https://cookiezest.com/terms/).
+
+This service is provided by CookieZest (FreshJuice). It is optional and off by default; the plugin works fully without it.
 
 == Installation ==
 
@@ -55,12 +63,22 @@ No. Zest is 100% free and open source. This plugin is GPL-3.0-or-later; the bund
 
 == Changelog ==
 
+= 1.1.0 =
+* Removed the blog and changelog dashboard widgets and their feed requests to cookiezest.com — the plugin now makes no network requests from wp-admin (Guidelines 7 & 9).
+* Documented the optional geo gating service in the readme (Guideline 6).
+* Admin styles and scripts are now enqueued via wp_enqueue_style/wp_enqueue_script instead of inline tags (Guideline 13).
+* Config output uses wp_add_inline_script instead of a raw script tag in wp_head.
+* Overview widget styles use wp_add_inline_style.
+
 = 1.0.0 =
 * Initial scaffolding. Settings page, enqueue, i18n, and build pipeline.
 * Bundles Zest v2.7.0.
 * Requires PHP 7.4+.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+No network requests from wp-admin anymore. Optional geo gating is now documented; the plugin works fully without it.
 
 = 1.0.0 =
 Initial release. Please test on a staging site first.
