@@ -155,7 +155,7 @@ final class Zest_CMP_Settings {
 				<?php if ( 'settings' === $tab ) : ?>
 				<span style="display:flex;gap:8px">
 					<button type="submit" class="button button-primary" form="zest-settings-form"><?php esc_html_e( 'Save Changes', 'zest-cmp' ); ?></button>
-					<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=zest_reset' ), 'zest_reset' ) ); ?>" onclick="return confirm('<?php echo esc_js( __( 'Reset all Zest settings to defaults? This cannot be undone.', 'zest-cmp' ) ); ?>');"><?php esc_html_e( 'Reset to defaults', 'zest-cmp' ); ?></a>
+					<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=zest_reset' ), 'zest_reset' ) ); ?>" data-zest-confirm="<?php echo esc_attr__( 'Reset all Zest settings to defaults? This cannot be undone.', 'zest-cmp' ); ?>"><?php esc_html_e( 'Reset to defaults', 'zest-cmp' ); ?></a>
 				</span>
 				<?php endif; ?>
 			</div>
@@ -303,24 +303,18 @@ final class Zest_CMP_Settings {
 		$options = Zest_CMP_Enqueue::get_instance()->build_config( $this->sanitize( array_merge( $this->get_settings(), $input ) ) );
 		$src     = ZEST_CMP_URL . 'dist/zest.min.js';
 
+		wp_enqueue_style( 'zest-cmp-preview', ZEST_CMP_URL . 'includes/preview.css', [], ZEST_CMP_VERSION );
 		wp_enqueue_script( 'zest-cmp-preview', $src, [], ZEST_CMP_ZEST_VERSION, false );
-		wp_add_inline_script( 'zest-cmp-preview', 'try{Zest.reset();Zest.init(window.ZestConfig);}catch(e){}' );
+		wp_add_inline_script( 'zest-cmp-preview', 'window.ZestConfig = ' . wp_json_encode( $options, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . ';', 'before' );
+		wp_add_inline_script( 'zest-cmp-preview', "window.addEventListener('message',function(e){if(e.origin===window.location.origin&&e.data&&'zest-reset'===e.data.type&&window.Zest){try{Zest.reset();Zest.init(window.ZestConfig);}catch(err){}}});try{Zest.reset();Zest.init(window.ZestConfig);}catch(e){}" );
 
 		header( 'Content-Type: text/html; charset=utf-8' );
 		?>
 <!DOCTYPE html>
 <html>
-<head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font-family:sans-serif;background:#f6f7f7;min-height:260px}</style></head>
+<head><meta name="viewport" content="width=device-width,initial-scale=1"><?php wp_print_styles( 'zest-cmp-preview' ); ?></head>
 <body>
-<p style="text-align:center;color:#8c8f94;padding-top:110px">Simulated page — banner appears here</p>
-<script>
-window.ZestConfig = <?php echo wp_json_encode( $options ); ?>;
-window.addEventListener( 'message', function( e ) {
-	if ( e.origin === '<?php echo esc_js( home_url() ); ?>' && e.data && 'zest-reset' === e.data.type && window.Zest ) {
-		try { window.Zest.reset(); window.Zest.init( window.ZestConfig ); } catch ( err ) {}
-	}
-} );
-</script>
+<p>Simulated page — banner appears here</p>
 <?php wp_print_scripts( 'zest-cmp-preview' ); ?>
 </body>
 </html>

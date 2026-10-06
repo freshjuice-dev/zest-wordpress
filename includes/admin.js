@@ -1,5 +1,10 @@
 // Postbox collapse + live preview wiring. Vanilla JS, no dependencies.
 document.addEventListener( 'DOMContentLoaded', function() {
+	document.querySelectorAll( '[data-zest-confirm]' ).forEach( function( link ) {
+		link.addEventListener( 'click', function( e ) {
+			if ( ! window.confirm( link.dataset.zestConfirm ) ) { e.preventDefault(); }
+		} );
+	} );
 	document.querySelectorAll( '.zest-card' ).forEach( function( card ) {
 		var btn = card.querySelector( '.handlediv' );
 		if ( ! btn ) { return; }

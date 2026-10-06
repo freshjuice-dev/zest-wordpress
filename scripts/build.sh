@@ -45,6 +45,8 @@ echo "Copying bundles..."
 
 # Full bundle (all 12 languages)
 cp "$ZEST_REPO/dist/zest.min.js" "$DIST_DIR/zest.min.js"
+cp "$ZEST_REPO/dist/zest.js" "$ZEST_REPO/dist/zest.js.map" "$DIST_DIR/"
+cp "$ZEST_REPO/LICENSE" "$DIST_DIR/LICENSE"
 echo "  zest.min.js (all 12 languages)"
 
 # Per-language bundles
@@ -52,6 +54,7 @@ for lang in en de es fr it pt nl pl uk ru ja zh; do
   src="$ZEST_REPO/dist/zest.${lang}.min.js"
   if [ -f "$src" ]; then
     cp "$src" "$DIST_DIR/zest.${lang}.min.js"
+    cp "$ZEST_REPO/dist/zest.${lang}.js" "$ZEST_REPO/dist/zest.${lang}.js.map" "$DIST_DIR/"
     echo "  zest.${lang}.min.js"
   fi
 done
@@ -59,6 +62,7 @@ done
 # Headless ESM
 if [ -f "$ZEST_REPO/dist/zest.headless.esm.min.js" ]; then
   cp "$ZEST_REPO/dist/zest.headless.esm.min.js" "$DIST_DIR/zest.headless.esm.min.js"
+  cp "$ZEST_REPO/dist/zest.headless.esm.js" "$ZEST_REPO/dist/zest.headless.esm.js.map" "$DIST_DIR/"
   echo "  zest.headless.esm.min.js"
 fi
 

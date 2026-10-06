@@ -38,6 +38,8 @@ cd ../zest && npm run build && cd -
 ./scripts/build.sh
 ```
 
+`build.sh` copies the minified bundles plus readable (unminified) bundles, source maps, type declarations, and the Zest MIT license into `dist/`. The readable files and source maps exist so wp.org reviewers and users can inspect the bundled JavaScript source directly, even though the plugin only enqueues the minified bundle. `dist/VERSION` records the bundled Zest version.
+
 ## Translations (i18n)
 
 Admin UI strings live in `languages/zest-cmp.pot` (translation template). It is regenerated automatically by `./scripts/build.sh` via `wp i18n make-pot` — no npm tooling involved. To contribute a translation, copy the `.pot` to `zest-cmp-<locale>.po`, fill in `msgstr`, and compile to `.mo` (e.g. with `wp i18n make-mo languages/`).

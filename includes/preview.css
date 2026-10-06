@@ -1,0 +1,12 @@
+body {
+	margin: 0;
+	font-family: sans-serif;
+	background: #f6f7f7;
+	min-height: 260px;
+}
+
+p {
+	text-align: center;
+	color: #8c8f94;
+	padding-top: 110px;
+}
