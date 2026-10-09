@@ -13,12 +13,24 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: wordpress-release
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', inputs.version) || github.ref_name }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Validate release tag
+        run: '[[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]'
+
       - name: Checkout plugin
         uses: actions/checkout@v7
+        with:
+          ref: ${{ env.RELEASE_TAG }}
 
       - name: Checkout Zest core repo
         uses: actions/checkout@v7
@@ -31,6 +43,20 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: '24'
+
+      - name: Validate release versions
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const assert = require('node:assert/strict');
+          const main = fs.readFileSync('zest-cmp.php', 'utf8');
+          const readme = fs.readFileSync('readme.txt', 'utf8');
+          const version = process.env.RELEASE_TAG.slice(1);
+          assert.equal(main.match(/\* Version: (\S+)/)[1], version);
+          assert.equal(main.match(/define\( 'ZEST_CMP_VERSION', '([^']+)'/)[1], version);
+          assert.equal(readme.match(/^Stable tag: (\S+)/m)[1], version);
+          assert.equal(main.match(/define\( 'ZEST_CMP_ZEST_VERSION', '([^']+)'/)[1], require('./zest-core/package.json').version);
+          NODE
 
       - name: Build Zest core
         working-directory: zest-core
@@ -45,14 +71,16 @@ jobs:
 
       - name: Build release zip
         run: |
-          mkdir -p /tmp/zest-cmp
-          rsync -a --exclude '.git*' --exclude '.github' --exclude 'node_modules' --exclude 'zest-core' --exclude 'scripts' --exclude 'assets' --exclude 'docker-compose*.yml' --exclude 'DEVELOPMENT.md' --exclude 'README.md' ./ /tmp/zest-cmp/
-          cd /tmp && zip -rq "${{ github.workspace }}/zest-cmp.zip" zest-cmp
+          mkdir -p "$RUNNER_TEMP/release/zest-cmp"
+          cp -R LICENSE readme.txt zest-cmp.php uninstall.php includes dist languages "$RUNNER_TEMP/release/zest-cmp/"
+          cd "$RUNNER_TEMP/release" && zip -rq "$GITHUB_WORKSPACE/zest-cmp.zip" zest-cmp
 
       - name: Attach zip to GitHub release
         uses: softprops/action-gh-release@v3
         with:
           files: zest-cmp.zip
+          tag_name: ${{ env.RELEASE_TAG }}
+          fail_on_unmatched_files: true
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -64,4 +92,5 @@ jobs:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SLUG: zest-cmp
           ASSETS_DIR: assets
-          EXCLUDE: scripts,README.md,DEVELOPMENT.md,zest-core,.github,.gitignore
+          BUILD_DIR: ${{ runner.temp }}/release/zest-cmp
+          VERSION: ${{ inputs.version }}
