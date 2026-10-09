@@ -21,6 +21,12 @@ Injects the [Zest JS bundle](https://github.com/freshjuice-dev/zest) into your s
 - **12 languages** with browser auto-detection
 - **Live preview** of the banner inside the settings screen
 
+## Current release
+
+Plugin 2.8.0 bundles Zest 2.8.0. Plugin versions now match the bundled library version.
+
+This update fixes automatic initialization with data attributes, validates blocking modes, and adds `Zest.updateConsent()` and `Zest.resolveGeo()` to the full browser build. Existing WordPress settings are preserved.
+
 ## Requirements
 
 - WordPress 5.2+
@@ -38,8 +44,8 @@ Injects the [Zest JS bundle](https://github.com/freshjuice-dev/zest) into your s
 # Local WordPress environment (http://localhost:8888, wp-admin login: zest/zest)
 docker compose up -d
 
-# Rebuild the bundled JS from the sibling zest repo
-cd ../zest && npm run build && cd -
+# Rebuild from a sibling zest checkout at tag v2.8.0
+cd ../zest && npm ci && npm run build && cd -
 ./scripts/build.sh
 ```
 

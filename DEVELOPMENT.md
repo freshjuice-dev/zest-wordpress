@@ -33,8 +33,10 @@ The plugin is mounted as a volume — edit PHP files and reload the page, no reb
 
 ## Rebuilding the Zest JS bundle
 
+Use a checkout of the Zest v2.8.0 tag, not the library's current main branch. Set `ZEST_REPO` to that checkout if your sibling repo is on another version.
+
 ```bash
-cd ../zest && npm run build && cd -
+cd ../zest && npm ci && npm run build && cd -
 ./scripts/build.sh
 ```
 

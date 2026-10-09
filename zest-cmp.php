@@ -3,7 +3,7 @@
  * Plugin Name: Zest CMP
  * Plugin URI: https://cookiezest.com
  * Description: Lightweight GDPR/CCPA cookie consent toolkit with script blocking, cookie interception, and a beautiful Shadow DOM UI — powered by @freshjuice/zest.
- * Version: 1.1.1
+ * Version: 2.8.0
  * Author: FreshJuice
  * Author URI: https://freshjuice.dev
  * License: GPL-3.0-or-later
@@ -20,8 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ZEST_CMP_VERSION', '1.1.1' );
-define( 'ZEST_CMP_ZEST_VERSION', '2.7.0' );
+define( 'ZEST_CMP_VERSION', '2.8.0' );
+define( 'ZEST_CMP_ZEST_VERSION', '2.8.0' );
 define( 'ZEST_CMP_FILE', __FILE__ );
 define( 'ZEST_CMP_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ZEST_CMP_URL', plugin_dir_url( __FILE__ ) );

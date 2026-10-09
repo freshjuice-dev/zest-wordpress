@@ -35,6 +35,11 @@ if [ -z "$ZEST_VERSION" ]; then
 fi
 
 echo "Zest version: $ZEST_VERSION"
+EXPECTED_VERSION=$(node -e "const fs = require('node:fs'); console.log(fs.readFileSync('$PLUGIN_DIR/zest-cmp.php', 'utf8').match(/ZEST_CMP_ZEST_VERSION', '([^']+)'/)[1])")
+if [ "$ZEST_VERSION" != "$EXPECTED_VERSION" ]; then
+  echo "ERROR: Expected Zest $EXPECTED_VERSION, got $ZEST_VERSION. Set ZEST_REPO to the matching tag checkout."
+  exit 1
+fi
 
 # Create dist directory
 mkdir -p "$DIST_DIR"

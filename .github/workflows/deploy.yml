@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: freshjuice-dev/zest
-          ref: v2.7.0
+          ref: v2.8.0
           path: zest-core
 
       - name: Setup Node.js
